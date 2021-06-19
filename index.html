@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <!-- Give the page a title -->
+  <title>Culver Map</title>
+  <!-- Add a link to the Leaflet CSS library so you can reference it for styling your map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <style>
+    /* style the body */
+    body {
+      margin: 0px;
+      height: 100%;
+      width: 100%;
+    }
+    /* style the map */
+    #map {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <!-- Add a link to the Leaflet JavaScript library so you can reference it for building your map -->
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+  <!-- Add a link to the jQuery JavaScript library so you can leverage ajax methods to load your data -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script>
+    // define map options
+    const mapOptions = {
+      center: [37.50, -81.633333], // center the map
+      zoom: 6
+    };
+
+    // define the map with the options above
+    const map = L.map("map", mapOptions);
+
+    // load a tile layer
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    	subdomains: 'abcd',
+    	maxZoom: 19
+    }).addTo(map);
+
+    // use jquery to load GeoJSON data
+    $.when(
+      $.getJSON('Culver-Pages-Scraped-Coords.geojson')
+      // when the files are done loading,
+      // identify them with names and process them through a function
+    ).done(function(points) {
+      // initiate a leaflet GeoJSON layer with L.geoJson, feed it the Culver data, and add to the map
+      const culverPoints = L.geoJson(points, {
+        pointToLayer: function(feature, latlng) {
+          return L.marker(latlng);
+        }
+      }).addTo(map);
+    });
+
+  </script>
+</body>
+</html>
