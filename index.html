@@ -70,6 +70,15 @@
     	maxZoom: 19
     }).addTo(map);
 
+    // 1857 Map Tiles
+    var lyr = L.tileLayer('CCP_1857_MapTiles/{z}/{x}/{y}.png', {
+      tms: true,
+      opacity: 1.0,
+      attribution: "",
+      minZoom: 2,
+      maxZoom: 7
+    }).addTo(map);
+
     // Add a marker at the specified latitude and longitude.
     var marker = L.marker([lat, lng]).addTo(map);
 /*
